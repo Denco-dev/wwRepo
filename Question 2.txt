@@ -1,0 +1,108 @@
+package com.org.interviewTest.myWwProject;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.Test;
+
+public class WW {
+	public class SearchTest {
+
+		public String baseUrl = "https://www.weightwatchers.com/us/";
+		public ChromeDriver driver = null;
+		public String expTitle1 = "Find WW Studios & Meetings Near You | WW USA";
+
+		@Test(priority = 0)
+		public void launchBrowser() {
+			System.setProperty("webdriver.chrome.driver", "./Drivers\\chromedriver.exe");
+			driver = new ChromeDriver();
+			driver.get(baseUrl);
+		}
+
+		@Test(priority = 1)
+		public void gettitle() {
+			String actTitle = driver.getTitle();
+			String expTitle = "WW (Weight Watchers): Weight Loss & Wellness Help | WW USA";
+			if (expTitle.equals(actTitle))
+				System.out.println("Test Passed");
+			else
+				System.out.println("Test Failed");
+		}
+
+		@Test(priority = 2)
+		public void workspace() {
+			driver.findElementByXPath(
+					"//span[@class='MenuItem_menu-item__inner-wrapper__1trJ0 MenuItem_menu-item__inner-wrapper--with-icon__2l1uq']//span[contains(text(),'Find a Workshop')]")
+					.click();
+		}
+
+		@Test(priority = 3)
+		public void loadedPage() {
+
+			String acTitle = driver.getTitle();
+			if (acTitle.contains("Find WW Studios & Meetings Near You | WW USA"))
+				System.out.println("Test Passed");
+			else
+				System.out.println("Test Failed");
+		}
+
+		@Test(priority = 4)
+		public void search() {
+			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+			driver.findElementByXPath("//input[@id='location-search']").sendKeys("10011");
+			driver.findElementByXPath("//button[@id='location-search-cta']//*[local-name()='svg']").click();
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+			String guy = driver.findElementByXPath("//a[contains(text(),'WW Studio Flatiron')]").getText();
+			System.out.println("The title is " + guy);
+
+			String she = driver.findElementByXPath("//span[contains(text(),'0.49 mi')]").getText();
+			System.out.println("Location is " + she);
+		}
+
+		@Test(priority = 5)
+		public void verify() {
+			driver.findElementByXPath("//a[contains(text(),'WW Studio Flatiron')]").click();
+
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+			driver.getPageSource();
+			if (driver.getPageSource().contains("WW Studio Flatiron")) {
+				System.out.println("Text is present");
+			} else {
+				System.out.println("Text is absent");
+			}
+		}
+
+		@Test(priority = 6)
+		public void hours() {
+			String hour1 = driver.findElementByXPath("//div[6]//div[1]//span[1]").getText();
+			{
+				System.out.println(hour1);
+			}
+			String hour2 = driver.findElementByXPath("//div[6]//div[2]//span[1]").getText();
+			{
+				System.out.println(hour2);
+			}
+			String hour3 = driver.findElementByXPath("//div[6]//div[3]//span[1]").getText();
+			{
+				System.out.println(hour3);
+			}
+		}
+
+		@Test(priority = 6)
+		public void schedule() {
+
+			WebElement Sun = driver.findElementByXPath("//body/div[@id='__next']/div/div/div/div[3]/div[1]");
+			String bodyText = Sun.getText();
+			int count = 0;
+			while (bodyText.contains("JOHN B.")) {
+				count++;
+				bodyText = bodyText.substring(bodyText.indexOf("JOHN B.") + "JOHN B.".length());
+			}
+			System.out.println("JOHN B. " + count);
+		}
+
+	}
+}

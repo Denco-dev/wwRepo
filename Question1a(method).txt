@@ -1,0 +1,20 @@
+package application;
+
+import java.io.File;
+import java.io.IOException;
+
+public class Question1 {
+
+	public void doesFileExist(String filePath) {
+	try {
+		File R = new File(filePath);
+		R.createNewFile();
+		System.out.println(R.exists());
+		} catch (IOException e) {
+			System.out.println("File could not be created!");
+			e.printStackTrace();
+		}
+	}
+
+
+}
